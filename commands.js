@@ -497,7 +497,7 @@ exports.commands = {
     
     away: function(arg, usern room) {
     	if(!user.hasRank(room, '@')) return false;
-    	if (/(xxx|porn|anal|fag|gay|nude|dick)/i.test(arg)) return this.say(room, '/warn ' + user.name + ', inap');
+    	if (/(xxx|porn|anal|fag|nude|dick)/i.test(arg)) return this.say(room, '/warn ' + user.name + ', inap');
     	if (arg.length > 15 - this.name.length) return this.say(room, '__The away message \'' + arg + '\' is too long. Try using an away message that\'s ' + 15 - this.name.length + ' letters long or less.__');
     	this.say(room, '/away ' + arg);
     },
