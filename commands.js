@@ -7,22 +7,41 @@ if (Config.serverid === 'eos') {
 
 const CONFIGURABLE_COMMANDS = {
 	'randmono': true,
-        'joingame': true,
-        'startgame': true,
-        'endgame': true,
-        'stay': true,
-        'hit': true,
-        'fire': true,
-        'signup': true,   
-        'randa': true,
-        'reel': true,
-        'pair': true,
-        'join': true,
-        'guide': true,
-        'say': true,
-        'pmuser': true,
-        'mymood': true
+    'joingame': true,
+    'startgame': true,
+    'endgame': true,
+    'stay': true,
+    'hit': true,
+    'fire': true,
+    'signup': true,   
+    'randa': true,
+    'reel': true,
+    'pair': true,
+    'join': true,
+    'guide': true,
+    'say': true,
+    'pmuser': true,
+    'mymood': true,
+    'be': true
 };
+
+var fs = require('fs'), ini = require('./ini.js')
+
+var userData = ini.parse(fs.readFileSync('./userdata.ini', 'utf-8')).Data.usersarray;
+
+//A Game of Trivia 
+var triviaQuestions = ['This Pokemon helps Nurse Joy in Pokemon Center and also have highest HP stat','blissey','What is the ability of Charizard Mega - X','toughclaws','A two turn move which starts with the absorbtion of sunlight','solarbeam','Its the only Dark Type Pulsating Move','darkpulse','Which colors are Raichu\'s Cheeks?','yellow','Pokemon having Rock type and SandStorm as his/her Ability','tyranitar','What ability boosts the power of Fire-type moves when the Pokemon is below 1/3 of its health?','blaze', 'What is the subtitle of the first Pokémon movie?','mewtwostrikesback','Name a move that can have a 100% chance of flinching the target barring Fake Out.','fling','What is the only Poison-Type Pokemon to learn Rock Polish?','garbodor','What cave lies between Mahogany Town and Blackthorn City?','icepath','This Electric-Type move increases the user\'s Special Defense.','charge','What is the only Pokémon available in the Yellow Forest Pokéwalker route?','pikachu','This is the nickname of the Pokemon acting as the light source of Glitter Lighthouse in Olivine City.','amphy','This Pokemon has the longest cry.','jynx','This Pokemon Conquest warlord has the warrior ability of "chesto!" at rank 2.','yoshihiro','What Pokemon is based on the mythological kitsune?','ninetales','This is the only pure Flying-Type Pokémon (excluding forms)','tornadus','This evolutionary stone either removes a type immunity or adds type immunities when used on certain Pokemon that evolve via this stone.','dawnstone','What is the only single-typed Pokemon with Tangled Feet?','spinda','This is the most expensive item that you can obtain in-game.','gorgeousroyalribbon','This Pokémon is the first Pokémon to be revealed.','rhydon','Name a non Psychic-Type Pokémon that can learn Heart Stamp.','pikachu','This type of berry have the longest name.','marangaberry','Name the only Pokemon with a BST of 336.','unown','Name a Pokémon that can be obtained by breeding a Pokémon they cannot evolve into.','phione','This herbal medicine cures infatuation.','mentalherb','This was the only Dragon-type attack in Generation I.','dragonrage','In the games, baseball players are represented by this trainer class.','infielder','Name one of the six moves that is a Self-KO move.',',memento','How much Poke Dollars does an Escape Rope cost?','500','What starter does your rival have in Pokemon Yellow version?','eevee','In the Pokemon anime, Jessie gives herself this name during the Kanto Grand Festival.','jessadia','What is the only Pokemon able to learn Secret Power by leveling up?','audino','This Pokemon in Pokemon Mystery Dungeon: Explorers of Time/Darkness/Sky has the job of waking up you and your partner in the morning.','exploud','In the main series Pokemon games, there are various Pokemon that impede your path to new areas. Name one.','snorlax','Name the only Pokemon to weigh 0.9 kg.','floette','This is the first Key Item you have in Pokemon X and Y.','holocaster','What is Castelia Park shaped like?','pokeball',' This Gym Leader doesn\'t have a Vs. Sprite.','juan','Pokemon with highest HP stat', 'blissey', 'What is Mega Venusaur\'s ability', 'thickfat', 'How many PP does hyper beam have normally (number only)', '5','This is the only Dark-Type move Clawitzer learns.','darkpulse','Which Pokemon according to the Unova horoscope represents Libra?','lampent','What Fighting-type move is guaranteed to cause a critical hit?','stormthrow','What ability boosts the power of Fire-type moves when the Pokemon is below 1/3 of its health?','blaze', 'What is the subtitle of the first Pokémon movie?','mewtwostrikesback','Name a move that can have a 100% chance of flinching the target barring Fake Out.','fling','What is the only Poison-Type Pokemon to learn Rock Polish?','garbodor','What cave lies between Mahogany Town and Blackthorn City?','icepath','This Electric-Type move increases the user\'s Special Defense.','charge','What is the only Pokémon available in the Yellow Forest Pokéwalker route?','pikachu','This is the nickname of the Pokemon acting as the light source of Glitter Lighthouse in Olivine City.','amphy','This Pokemon has the longest cry.','jynx','This Pokemon Conquest warlord has the warrior ability of "chesto!" at 2.','yoshihiro','What Pokemon is based on the mythological kitsune?','ninetales','What Move does HM02 contain?','fly','What Pokemon was Latias combined with in early concept art?','blaziken','What is Prof. Oak\'s first name?','samuel','Who ran the bank in Pokemon Mystery Dungeon: Explorers of Time, Darkness, and Sky?','duskull','Which Pseudo legendary was originally based off of a tank?','hydreigon','Which Legendary Pokemon was originally found at Victory Road but was moved to the Sevii Islands in later generations?','moltres','What Pokemon requires an empty space in the party during evolution to be obtained?','shedinja','Which Pokemon has the lowest base stat total?','sunkern','In the main series game, this Pokemon can evolve into its final form using either one of 2 methods.','feebas','Which Pokemon Has the Highest \"Attack\" stat that is __Not__ A Legendary or Mega', 'rampardos','Which Pokemon Has the Highest \"Speed\" stat that is __Not__ A Legendary or Mega', 'ninjask','Which Pokemon Has the Highest \"Defense\" stat that is __Not__ A Legendary or Mega', 'shuckle','Which Pokemon Has the Highest \"Special Defense\" stat that is __Not__ A Legendary or Mega', 'shuckle','Which Pokemon Has the Highest \"Special Attack\" stat that is __Not__ A Legendary or Mega', 'chandelure','Which Pokemon Has the Lowest \"HP\" stat', 'shedinja','This ability is exclusive to Dragonite and Lugia.', 'multiscale', 'This\, Servine\'s hidden ability\, is also the hidden ability of Spinda', 'contrary', 'Water-type starter pokemon have this ability as their primary ability.', 'torrent', 'Most legendary pokemon have this ability\, which doubles the amount of PP opponents use up when attacking.', 'pressure', 'Pokemon with this ability are immune to moves such as Bug Buzz and Boomburst.', 'soundproof', 'This ability allows the pokemon to change typing and appearance when the weather shifts.', 'forecast', 'A pokemon\'s speed stat is doubled in the rain when it has this ability.', 'swiftswim','This move is the signature move of Chatot.', 'chatter', 'Aside from smeargle\, Lugia is the only pokemon that can learn this flying-type move with an increased critical-hit rate.', 'aeroblast', 'This move deals supereffective damage to water-type pokemon even when used by a pokemon with Normalize.', 'freezedry', 'This move is given as a technical machine after defeating Tate & Liza.', 'calm mind', 'A hidden machine introduced in Diamond and Pearl\, this move deals normal-typed damage and may confuse the opponent.','rockclimb','This pokemon is first encountered inside a TV set in the Old Chateau.', 'rotom', 'This guaranteed-shiny pokemon can be encountered in the Nature Preserve.', 'haxorus', 'This is the only pokemon that can be encountered walking in Rusturf Tunnel.', 'whismur', 'As thanks for stopping Team Magma/Aqua\, the Weather Institute gives you one of these pokemon.', 'castform', 'This pokemon is the only one to have the ability Stance Change.', 'aegislash', 'As you liberate Silph Co. from Team Rocket\, an employee will give you one of these pokemon.', 'lapras', 'This pokemon costs 9999 coins at the Celadon Game Corner.', 'porygon', 'You can receive this pokemon as a gift from Bebe.', 'eevee', 'This ghost-type evolves from female Snorunt.', 'froslass', 'This lake guardian resides in Lake Verity.', 'mesprit','This person is the Hoenn Champion in Pokemon Emerald.', 'wallace', 'The pokemon PC system is operated by this lady in the Hoenn Region.', 'lanette', 'The pokemon PC system was expanded to allow trade with Hoenn by this resident of One Island', 'Celio', 'Pokemon Platinum introduced this NPC\, a scientist working with Team Galactic that was arrested in Stark Mountain.', 'charon', 'Viridian\'s gym leader\, he is also the boss of Team Rocket.', 'giovanni', 'This person is the head of Team Galactic.', 'cyrus', 'This member of the Seven Sages resurrected Team Plasma in the events of Black and White 2.', 'ghetsis', 'A member of the Hoenn elite four\, this person\'s team includes Altaria and Flygon.', 'drake', 'This item has a 3/16 chance to move the user to the top of its priority bracket.', 'quickclaw', 'Holders of this item cannot become infatuated\, and they also guarantee their offspring inherit 5 stats from its parents.', 'destinyknot', 'Defeating the Winstrate family and talking to them afterward allows the player to receive this item\, which doubles the EV gains of its holder.', 'machobrace', 'This item is found deep inside Mt. Ember after the player receives the National Pokedex.', 'ruby', 'Sinnoh\'s underground can be visited once the player has obtained this Key Item.', 'explorerkit', 'This item summons Heatran when brought to Stark Mountain or Reversal Mountain.', 'magmastone','What Pokemon is based off of antlion larvae?', 'trapinch', 'What Pokemon trainer gives you a Dusk Stone in ORAS after defeating them?','hexmaniacvalerie','What move increases the Attack and Sp. Attack of grounded Grass-type Pokemon?', 'rototiller', 'Who is the daughter of a gym leader that became a member of the Elite Four?', 'janine', 'What was the most common pokemon type in Gen 1?', 'poison', 'What is the only pure flying type not named arceus?', 'tornadus', 'Who is the worst E4 in Vanguard?', 'myth', 'Who is better at rapping me or mewth?', 'mewth', 'Who was the main character of Pokémon XD Gale of Darkness?', 'michael', 'This pokemon takes the longest to evolve', 'larvesta', 'What is the most OP Pokemon ever?', 'magikarp'];
+var triviaRoom; // This var will check if trivia is going in other room or not..
+var triviaON = false; // A switch case to tell if trivia is going on not
+var triviaTimer; // Keeps the track of the timer of the trivia
+var triviaA; // The answer of the trivia
+var triviaQ; // Question of trivia
+var triviaPoints = []; // This empty object will keep the track off all the trivia points during a game of trivia
+var teamOne = [];
+var teamTwo = [];
+var teamOnePoints = 0;
+var teamTwoPoints = 0;
+clearInterval(triviaTimer);
 
 exports.commands = {
 
@@ -31,14 +50,16 @@ exports.commands = {
 	****************/
 
 	reload: function (arg, user, room) {
+		var userdata = ini.parse(fs.readFileSync('./userdata.ini', 'utf-8'));
 		if (!user.isExcepted) return false;
 		try {
 			this.uncacheTree('./commands.js');
 			Commands = require('./commands.js').commands;
-			this.say(room, '__Commands reloaded.__');
+			this.say(room, '__commands.js reloaded.__');
 		} catch (e) {
 			error('failed to reload: ' + e.stack);
 		}
+		 fs.writeFileSync('./userdata.ini', ini.stringify(userdata));
 	},
 
 	uptime: function (arg, user, room) {
@@ -100,7 +121,7 @@ exports.commands = {
 		var matched = false;
 		if (arg === 'retro1') {
 			matched = true;
-			this.say(room, '/wall Everyone must enter with ONE POKEMON ONLY.');
+			this.say(room, '/wall Everyone must enter with ONE POKEMON ONLY. DO NOT MAKE A 3 POKEMON TEAM.');
 		}
 		if (arg === 'retro2') {
 			matched = true;
@@ -117,6 +138,10 @@ exports.commands = {
 		if (arg === 'retro5') {
 			matched = true;
 			this.say(room, '/wall Don\'t change pokemon during this tournament.');
+		} 
+		if (arg === 'retro6') {
+			matched = true;
+			this.say(room, '/wall ALL RULES ARE HERE: http://izziisawesome2011.wix.com/tournaments#!retro-1v1/a3hkp');
 		} 
 		if (arg === 'monogen1') {
 			matched = true;
@@ -145,6 +170,18 @@ exports.commands = {
 		if (arg === 'botg4') {
 			matched = true;
 			this.say(room, '/wall PM Dream Eater Gengar your teams to see if they are viable.');
+		}
+		if (arg === 'gt1') {
+			matched = true;
+			this.say(room, '/wall Voting for the tiers: ChallengeCup1v1 or ChallengeCup is useless. Any votes for those tiers will be ignored.');
+		}
+		if (arg === 'gt2') {
+			matched = true;
+			this.say(room, '/wall Vote for a tier you\'ll probably win in, to increase your chances of winning the prize!');
+		}
+		if (arg === 'gt3') {
+			matched = true;
+			this.say(room, '/wall Switching teams and scouting is against the rules (unless the tier is random).');
 		} else if (!matched) {
 			this.say(room, "__The wall '" + arg + "' does not exist.__");
 		}
@@ -163,7 +200,6 @@ exports.commands = {
 	metagames: 'info',
 	information: 'info',
 	info: function(arg, user, room) {
-		if (!user.isExcepted) return false;
 		arg = arg.toLowerCase();
 		var matched = false;
 		if (arg === 'ou' || arg === 'overused') {
@@ -298,32 +334,11 @@ exports.commands = {
 		}
 	},
 
-    d: 'declare',
-	declare: function (arg, user, room) {
-		if (!user.isExcepted) return false;
-		arg = arg.toLowerCase();
-		var matched = false;
-		if (arg === 'gt1') {
-			matched = true;
-			this.say(room, '/declare <u>Voting for the tiers</u>: <b>ChallengeCup1v1</b> or <b>ChallengeCup</b> is useless.<br />Any votes for those tiers will be ignored.');
-		}
-		if (arg === 'gt2') {
-			matched = true;
-			this.say(room, '/declare Vote for a tier you\'ll probably win in, to increase your chances of winning the prize!');
-		}
-		if (arg === 'gt3') {
-			matched = true;
-			this.say(room, '/declare Switching teams and scouting is against the rules (unless the tier is random).');
-		} else if (!matched) {
-			this.say(room, "__The declare '" + arg + "' does not exist.__");
-		}
-	},
-
 	music: function(arg, user, room) {
 		if (!user.isExcepted) return false;
 		var parts = arg.split(',');
-		if (!/(.mp3)/i.test(parts[1])) return this.say(room, 'The soundtrack needs to end by .mp3');
 		if (!parts[1]) return this.say(room, '__Usage: -music [music title/description], [music.mp3]__');
+		if (!/(.mp3)/i.test(parts[1])) return this.say(room, '__The soundtrack needs to end by .mp3__');
 		this.say(room, '/declare ' + parts[0] + '<br /><audio src="' + parts[1] + '" controls="" style="width: 100%;"></audio>');
 	},
 
@@ -343,6 +358,7 @@ exports.commands = {
 		this.say(room, '/leave');
 	},
 
+	corrotorneios: 'runtour', //for Portuguese
 	runtour: function(arg, user, room) {
 		if(!user.hasRank(room, '+')) return false;
 		this.say(room, '/tour start');
@@ -350,6 +366,66 @@ exports.commands = {
 		this.say(room, '/tour autodq 2');
 		this.say(room, '/tour runautodq');
 		this.say(room, '/wall Good luck and Have fun!');
+
+		this.remind2 = setTimeout(function (room, remind2) {
+			this.say(room, remind2);
+		}.bind(this), 120 * 1000, room, '/tour remind');
+
+		this.remind3 = setTimeout(function (room, remind3) {
+			this.say(room, remind3);
+		}.bind(this), 420 * 1000, room, '/tour remind');
+	},
+
+    gte: 'grandtourevent',
+	grandtourevent: function(arg, user, room){
+		if (room.id !== "tournaments") return false;
+	    if (!user.hasRank(room.id, '#')) return false;
+	    this.say(room, '/etour ' + arg)
+	    this.say(room, '/wall The Grand Tournament will be starting in 15 minutes!')
+
+		this.gt3 = setTimeout(function (room, gt3) {
+			this.say(room, gt3);
+		}.bind(this), 120 * 1000, room, '/wall Switching teams and scouting is against the rules (unless the tier is random).');
+
+		this.gt32 = setTimeout(function (room, gt32) {
+			this.say(room, gt32);
+		}.bind(this), 480 * 1000, room, '/wall Switching teams and scouting is against the rules (unless the tier is random).');
+
+		this.gtedeclare = setTimeout(function (room, gt32) {
+			this.say(room, gt32);
+		}.bind(this), 750 * 1000, room, '/modnote Declare the last gdeclare in 30 seconds!');
+
+		this.gtedeclare = setTimeout(function (room, gt32) {
+			this.say(room, gt32);
+		}.bind(this), 856 * 1000, room, '/wall We\'re starting!');
+
+		this.gtestart = setTimeout(function (room, gtestart) {
+			this.say(room, gtestart);
+		}.bind(this), 900 * 1000 , room, '/tour start');
+
+		this.gteremind = setTimeout(function (room, gteremind) {
+			this.say(room, gteremind);
+		}.bind(this), 901 * 1000 , room, '/tour remind');
+
+		this.gteautodq = setTimeout(function (room, gteautodq) {
+			this.say(room, gteautodq);
+		}.bind(this), 902 * 1000 , room, '/tour autodq 2');
+
+		this.gterundq = setTimeout(function (room, gterundq) {
+			this.say(room, gterundq);
+		}.bind(this), 903 * 1000 , room, '/tour runautodq');
+
+		this.gt33 = setTimeout(function (room, gt33) {
+			this.say(room, gt33);
+		}.bind(this), 963 * 1000, room, '/wall Switching teams and scouting is against the rules (unless the tier is random).');
+
+        this.gteremind2 = setTimeout(function (room, gteremind2) {
+			this.say(room, gteremind2);
+		}.bind(this), 1030 * 1000, room, '/tour remind');
+
+		this.gteremind3 = setTimeout(function (room, gteremind3) {
+            this.say(room, gteremind3);
+		}.bind(this), 1150 * 1000, room, '/tour remind');        		
 	},
 
 	/*********************
@@ -460,14 +536,15 @@ exports.commands = {
 		this.say(room, '__Message sent!__');
 	},
 
+	dizer: 'say',//for Portuguese
 	say: function(arg, user, room) {
-		if (/(penis|vagina|xxx|porn|anal)/i.test(arg)) return this.say(room, '/warn ' + user.name + ', inap');
+		if (/(penis|vagina|xxx|porn|anal|fag|nude|dick)/i.test(arg)) return this.say(room, '/warn ' + user.name + ', Automated response: inap');
 		this.say(room, stripCommands(arg));
 	},
 
+	casar: 'pair',//for Portuguese
     marry: 'pair',
     pair: function(arg, user, room) {
-        if (!user.canUse('pair', room)) return false;
         var pairing = toId(arg);
 
         function toBase(num, base) {
@@ -489,28 +566,408 @@ exports.commands = {
         user.pair = toBase(user.id, 10);
         pairing = toBase(pairing, 10);
         var match = (user.pair + pairing) % 101;
+
+        if (room.id === 'portugus') return this.say(room, user.name + ' e ' + arg + ' são ' + match + '% compatível!');//for Portuguese
+        if (user.name === 'Dex Leader Blue' && arg === 'Master Float') return this.say(room, 'Dex Leader Blue and Master Float are 69% compatible! :^]');
+        if (user.name === 'Master Float' && arg === 'Dex Leader Blue') return this.say(room, 'Master Float and Dex Leader Blue are 69% compatible! :^]');
+
+        if (user.name === 'Inferno Prof Fabio' && arg === 'Master Float') return this.say(room, 'Inferno Prof Fabio and Master Float are 100% compatible! Such love!~');
+        if (user.name === 'Master Float' && arg === 'Inferno Prof Fabio') return this.say(room, 'Master Float and Inferno Prof Fabio are 100% compatible! Such love!~');
+
         if (match <= 20) return this.say(room, user.name + ' and ' + arg + ' are ' + match + '% compatible! The hate is real.');
         if (match >= 80) return this.say(room, user.name + ' and ' + arg + ' are ' + match + '% compatible! Such love!~');
+        if (match === 69) return this.say(room, user.name + ' and ' + arg + ' are ' + match + '% compatible! ooo kinky.');
 
         this.say(room, user.name + ' and ' + arg + ' are ' + match + '% compatible!');
     },
-    
-    away: function(arg, usern room) {
-    	if(!user.hasRank(room, '@')) return false;
-    	if (/(xxx|porn|anal|fag|nude|dick)/i.test(arg)) return this.say(room, '/warn ' + user.name + ', inap');
-    	if (arg.length > 15 - this.name.length) return this.say(room, '__The away message \'' + arg + '\' is too long. Try using an away message that\'s ' + 15 - this.name.length + ' letters long or less.__');
+
+    away: function(arg, user, room) {
+    	if(!user.hasRank(room, '+')) return false;
+    	if (/(xxx|porn|anal|fag|nude|dick)/i.test(arg)) return this.say(room, '/warn ' + user.name + ', Automated response: inap');
+    	if (arg.length > 4) return this.say(room, '__The away message \'' + arg + '\' is too long. Try using an away message that\'s 4 letters long or less.__');
+    	if (arg === 'n') return this.say(room, '/back');
     	this.say(room, '/away ' + arg);
     },
+
+    be: function(arg, user, room) {
+    	arg = arg.toLowerCase();
+		var matched = false;
+		if (arg === 'happy') {
+			matched = true;
+			this.say(room, 'feelsgd');
+		}
+		if (arg === 'sad') {
+			matched = true;
+			this.say(room, 'feelsbd');
+		}
+		if (arg === 'mad') {
+			matched = true;
+			this.say(room, 'feelsmd');
+		}
+		if (arg === 'high') {
+			matched = true;
+			this.say(room, 'fukya');
+		}
+		if (arg === 'thinking') {
+			matched = true;
+			this.say(room, 'hmmface');
+		}
+		if (arg === 'dead' || arg === 'ded') {
+			matched = true;
+			this.say(room, 'feelsdd');
+		}
+		if (arg === 'scared' || arg === 'confused') {
+			matched = true;
+			this.say(room, 'oshet');
+		}
+		if (arg === 'serious' || arg === 'resentful') {
+			matched = true;
+			this.say(room, 'feelsrs');
+		}
+		if (arg === 'stupid' || arg === 'dumb') {
+			matched = true;
+			this.say(room, 'fukya');
+		}
+		if (arg === 'ok') {
+			matched = true;
+			this.say(room, 'feelsok');
+		}		
+		if (arg === 'nervous') {
+			matched = true;
+			this.say(room, 'feelsnv');
+		}
+		if (arg === 'funny') {
+			matched = true;
+			this.say(room, 'funnylol');
+		}
+		if (arg === 'rofling' || arg === 'laughing') {
+			matched = true;
+			this.say(room, 'xaa');
+		} else if (!matched) {
+			this.say(room, "__I can't feel that way__ wtfman");
+		}
+    },
+
+    trivia: function(arg, user, room){
+		if (room === user) return false;
+		var text = '';
+		if(triviaON){this.say( room, '__**ERROR**: A game of trivia is going on another room and hence it cannot be started here__'); return false;}
+		triviaON = true;
+		triviaRoom = room.id;
+                triviaA = '';
+		triviaPoints = [];
+		this.say( room, '__' + user.name + ' is hosting a game of **trivia**. Answer the questions using -ta or -triviaanswer. First to get 10 points wins.__');
+		triviaTimer = setInterval( function() {
+                        if(triviaA){this.say(room, '**BEEP** TIMES UP!! ' + triviaA);}
+			var TQN = 2*(Math.floor(triviaQuestions.length*Math.random()/2))
+			triviaQ = triviaQuestions[TQN];
+			triviaA = triviaQuestions[TQN+ 1];
+			this.say( room, '**Question**: ' + triviaQ); 
+		}.bind(this), 15000);
+		
+	},
+	triviapoints: function(arg, user, room){
+		var text = user.canUse('triviapoints', room.id) ? '' : '/pm ' + user.id + ', ';
+		if(!anagramON) return false;
+		var text = '**Points so far**: '
+		for (var i = 0; i < triviaPoints.length; i++){
+			text += '' + triviaPoints[i] + ': ';
+			text += triviaPoints[i + 1] + ' Pokepoints, ';
+			i++
+		}
+		this.say(room, text);
+	},
+	ta: 'triviaanswer',
+	triviaanswer: function(arg, user, room){
+		if(room.id !== triviaRoom) return false;
+		if (!arg) return false;
+		arg = (arg);
+		arg = arg.replace(/\s+/g, '');
+		arg = arg.toLowerCase();
+		var theuser = (user.name);
+		if(arg == triviaA){
+			if (triviaPoints.indexOf(theuser) > -1){
+				triviaA = '';
+				triviaPoints[triviaPoints.indexOf(theuser) + 1] += 1;
+				if (triviaPoints[triviaPoints.indexOf(theuser) + 1] >= 10) {
+					clearInterval(triviaTimer);
+					this.say( room, '__**Congrats to ' + user.name + ' for winning Trivia!**__');
+					this.say(room,'/pm '+ user.name + ' ,__**Congratulations** on winning the game of trivia.__')
+					triviaON = false; 
+					return false;
+				}
+				this.say(room,'__**' + user.name + '** got the right answer, and has **' + triviaPoints[triviaPoints.indexOf(theuser) + 1] + '** points!__');
+			} else {
+				triviaA = '';
+				triviaPoints[triviaPoints.length] = theuser;
+				triviaPoints[triviaPoints.length] = 1;
+				this.say(room,'__**' + user.name + '** got the right answer, and has **' + triviaPoints[triviaPoints.indexOf(theuser) + 1] + '** point!__');
+			}
+		}
+	},
+
+	endtrivia: 'triviaend',
+	triviaend: function(arg, user, room){
+                if (room === user) return false;
+		if(room.id !== triviaRoom)return false;
+		if(!triviaON) return false;
+		clearInterval(triviaTimer);
+		this.say(room, '__The game of trivia has been ended.__');
+		triviaON = false;
+	},
+
+
+
+
+    /* IN BOT MONEY SYSTEM */
+
+	addcoins: 'givecoins',
+	addbucks: 'givecoins',
+	'givecoins': function (arg, user, room) {
+	                if(user.id !== "masterfloat") return false;
+	         var argu = arg.split(",");
+	         var userexists = false;
+	     var theuser = toId(argu[0]);
+	     var userdata = ini.parse(fs.readFileSync('./userdata.ini', 'utf-8'));
+	     userData = userdata.Data.usersarray;
+	     var i;
+	         if (argu.length == 2){
+	                 
+	                 for(i = 0; i < userData.length; i +=2){
+	    if (theuser == userData[i]){
+	     userexists = true;
+	     var prevnum = userdata.Data.usersarray[i+1];
+	     userdata.Data.usersarray[i+1] = Number(prevnum)+Number(argu[1]);
+	     fs.writeFileSync('./userdata.ini', ini.stringify(userdata));
+	     userData = userdata.Data.usersarray;
+	     return this.say(room,argu[0]+" has gotten "+argu[1]+" Genesis Coins and now has "+userData[i+1]+ " Genesis Coins.");
+	     break;
+	    }
+	  }
+	 
+	  if (userexists == false){
+	   userdata.Data.usersarray.push(theuser);
+	   fs.writeFileSync('./userdata.ini', ini.stringify(userdata));
+	   userdata.Data.usersarray.push(argu[1]);
+	   fs.writeFileSync('./userdata.ini', ini.stringify(userdata));
+	   userData = userdata.Data.usersarray;
+	   return this.say(room,argu[0]+" has gotten "+argu[1]+" Genesis Coins and now has "+argu[1]+ " Genesis Coins.");
+	  }
+	         }else{
+	                 return this.say(room,"Error. proper syntax is @givecoins [user],[amount]")
+	         }
+	  },
+	'takecoins': function (arg, user, room) {
+	                if(user.id !== "masterfloat") return false;
+	         var argu = arg.split(",");
+	         var userexists = false;
+	     var theuser = toId(argu[0]);
+	     var userdata = ini.parse(fs.readFileSync('./userdata.ini', 'utf-8'));
+	     userData = userdata.Data.usersarray;
+	     var i;
+	         if (argu.length == 2){
+	                 
+	                 for(i = 0; i < userData.length; i +=2){
+	    if (theuser == userData[i]){
+	     userexists = true;
+	     var prevnum = userdata.Data.usersarray[i+1];
+	     userdata.Data.usersarray[i+1] = Number(prevnum)-Number(argu[1]);
+	     fs.writeFileSync('./userdata.ini', ini.stringify(userdata));
+	     userData = userdata.Data.usersarray;
+	     return this.say(room,argu[0]+" has lost "+argu[1]+" Genesis Coins and now has "+userData[i+1]+ " Genesis Coins.");
+	     break;
+	    }
+	  }
+	 
+	         }else{
+	                 return this.say(room,"Error. proper syntax is @takecoins [user],[amount]")
+	         }
+	  },
+	'resetcoins': function (arg, user, room) {
+	                if(user.id !== "masterfloat") return false;
+	         var argu = arg.split(",");
+	         var userexists = false;
+	     var theuser = toId(argu[0]);
+	     var userdata = ini.parse(fs.readFileSync('./userdata.ini', 'utf-8'));
+	     userData = userdata.Data.usersarray;
+	     var i;
+	                 for(i = 0; i < userData.length; i +=2){
+	                         if (!arg) {
+	    if (theuser == userData[i]){
+	    return this.say(room, 'Error: Proper Syntax is @resetcoins [username].')
+	    }
+	         }else if (theuser == userData[i]){
+	     userexists = true;
+	     var prevnum = userdata.Data.usersarray[i+1];
+	     userdata.Data.usersarray[i+1] = Number(prevnum)-Number(prevnum);
+	     fs.writeFileSync('./userdata.ini', ini.stringify(userdata));
+	     userData = userdata.Data.usersarray;
+	     return this.say(room,argu[0]+"'s Genesis Coins have been reset, he now has "+userData[i+1]+ " Genesis Coins.");
+	     break;
+	         }
+	                 }
+	  },
+	'deleteuser': function (arg, user, room) {
+	                if(user.id !== "masterfloat") return false;
+	         var argu = arg.split(",");
+	         var userexists = false;
+	     var theuser = toId(argu[0]);
+	     var userdata = ini.parse(fs.readFileSync('./userdata.ini', 'utf-8'));
+	     userData = userdata.Data.usersarray;
+	     var i;
+	                 for(i = 0; i < userData.length; i +=2){
+	                         if (!arg) {
+	     if (theuser == userData[i]){
+	        userexists = true;
+	        userdata.Data.usersarray.splice(i,1)
+	        fs.writeFileSync('./userdata.ini', ini.stringify(userdata));
+	        userData = userdata.Data.usersarray;
+	    }else{
+	            return this.say(room, 'Error: Proper Syntax is @resetcoins [username].')
+	    } 
+	                         }
+	                 }
+	                         },
+
+	'atm': function (arg, user, room) {
+	   var userexists = false;
+	   var theuser = toId(arg); 
+	   var userdata = ini.parse(fs.readFileSync('./userdata.ini', 'utf-8'));
+	   userData = userdata.Data.usersarray;
+	   var i;
+	 for(i = 0; i < userData.length; i +=2){
+	         if (arg == userData[i]) {
+	            if (userexists = true); {
+	    if (theuser == userData[i]){
+	     this.say(room,arg+" has "+userData[i+1]+ " Genesis Coins.");
+	     break;
+	    }
+	            }
+	         }
+	    else if (!arg){
+	           if (user.id == userData[i]){
+	      this.say(room,user.name + " has " + userData[i+1]+ " Genesis Coins.");
+	}
+	}
+	else
+	{
+	}
+	}
+	},
+	'currentusers': function (arg, user, room) {
+	        if(user.id !== "masterfloat") return false;
+	   var theuser = toId(arg); 
+	   var userdata = ini.parse(fs.readFileSync('./userdata.ini', 'utf-8'));
+	   var i;
+	   this.say(room, userData)
+	  
+	},
+
+	'transferbucks': function (arg, user, room) {// Usage .transferbucks [user],[amount]
+	         if(user.id !== "masterfloat") {
+	      
+	     
+	         
+	             this.say(room, 'Only Master Float ');
+	         }else{ 
+	                    var argu = arg.split(",");
+	         if (argu.length != 2){return this.say(room,"Usage: .transferbucks [user],[amount]");};
+	         if (argu[1] == 0 || isNaN(argu[1])){return false;}
+	         var userdata = ini.parse(fs.readFileSync('./userdata.ini', 'utf-8'));
+	         var theuser = user.name;
+	         var i;
+	         userData = userdata.Data.usersarray;
+	         var playerid = userData.indexOf(toId(theuser));
+	         var player2id = userData.indexOf(toId(argu[0]));
+	                    if (playerid != -1){
+	                if(Number(userData[playerid+1]) >= argu[1]){
+	                        if (player2id != -1){
+	                                 userdata.Data.usersarray[playerid+1] = Number(userdata.Data.usersarray[playerid+1]) - Number(argu[1]);
+	                             fs.writeFileSync('./userdata.ini', ini.stringify(userdata));
+	                         userdata.Data.usersarray[player2id+1] = Number(userdata.Data.usersarray[player2id+1]) + Number(argu[1]);
+	                             fs.writeFileSync('./userdata.ini', ini.stringify(userdata));
+	                                 userData = userdata.Data.userarray;
+	                             this.say(room,"/pm "+toId(theuser)+", You have successfully transfer "+argu[1]+" bucks to "+argu[0]+". Your current total is "+userdata.Data.usersarray[playerid+1]+" bucks.");
+	                             this.say(room,"/pm "+toId(argu[0])+", You have received "+argu[1]+" bucks from "+theuser+". Your current total is "+userdata.Data.usersarray[player2id+1]+" bucks.");
+	                        }else{
+	                                userdata.Data.usersarray[playerid+1] = Number(userdata.Data.usersarray[playerid+1]) - Number(argu[1]);
+	                            fs.writeFileSync('./userdata.ini', ini.stringify(userdata));
+	                                userdata.Data.usersarray.push(toId(argu[0]));
+	                                userdata.Data.usersarray.push(argu[1]);
+	                                fs.writeFileSync('./userdata.ini', ini.stringify(userdata));
+	                                userData = userdata.Data.userarray;
+	                            this.say(room,"/pm "+toId(theuser)+", You have successfully transfer "+argu[1]+" bucks to "+argu[0]+". Your current total is "+userdata.Data.usersarray[playerid+1]+" bucks.");
+	                            this.say(room,"/pm "+toId(argu[0])+", You have received "+argu[1]+" bucks from "+theuser+". Your current total is "+argu[1]+" bucks.");
+	                        }
+	                       
+	                }else{
+	                        return this.say(room,"/pm "+toId(theuser)+", You do not have enough to transfer.");
+	                }
+	        }else{
+	                userdata.Data.usersarray.push(toId(theuser));
+	        userdata.Data.usersarray.push(0);
+	                fs.writeFileSync('./userdata.ini', ini.stringify(userdata));
+	                userData = userdata.Data.userarray;
+	        return this.say(room,"/pm "+toId(theuser)+", You do not have enough to transfer.");            
+	        }
+	         
+	         }
+	},
+	top: 'richest',
+	'richest': function (arg, user, room) {
+	        var numberToDisplay = toId(arg);
+	        if (this.cmd == 'top'){
+	                if (arg){
+	                     if (!isNaN(arg)){
+	                             if (arg <= 20){
+	                             numberToDisplay = arg;    
+	                            }
+	                    }
+	                }else{
+	                numberToDisplay = 5;   
+	                }      
+	        }
+	        var userdata = ini.parse(fs.readFileSync('./userdata.ini', 'utf-8'));
+	    var userDatacopy = userdata.Data.usersarray;
+	        var topusers = [];
+	        var topusersnum = [];
+	        var maxnumber = 0;
+	        var i;
+	        var j;
+	        var text = "";
+	        for(i = 0; i < numberToDisplay; i+=1){
+	                maxnumber = 0;
+	                for(j = 0; j < userDatacopy.length; j+=2){
+	                        if (maxnumber < Number(userDatacopy[j+1])){
+	                                maxnumber = Number(userDatacopy[j+1])
+	                                topusers[i] = userDatacopy[j];
+	                                topusersnum[i] = Number(userDatacopy[j+1]);
+	                        }
+	            if (j == userDatacopy.length-2){
+	                                var userid = userDatacopy.indexOf(topusers[i]);
+	                                userDatacopy.splice(userid,2);
+	                        }                      
+	                }
+	        }
+	        for(i = 0; i < topusers.length; i+=1){
+	                if  (i != topusers.length-1){
+	                        text += "**("+(i+1)+").** "+topusers[i]+"("+topusersnum[i]+"),";
+	                }else{
+	                        text += "**("+(i+1)+").** "+topusers[i]+"("+topusersnum[i]+").";
+	                }
+	        }
+	        return this.say(room,text);
+	},
 
 	/********************
 	* FUN COMMANDS ~END *
 	********************/
 
-	/*******************************************************************************************
-	* Room Owner commands                                                                      *
-	*
-	* These commands allow room owners to personalise settings for moderation and command use. *
-	*******************************************************************************************/
+	/********************************************************************************************
+	 * Room Owner commands                                                                      *
+	 *
+	 * These commands allow room owners to personalise settings for moderation and command use. *
+	 *******************************************************************************************/
 
 	settings: 'set',
 	set: function (arg, user, room) {
@@ -529,8 +986,8 @@ exports.commands = {
 			monotype: 1,
 			survivor: 1,
 			happy: 1,
-			buzz: 1
-
+			buzz: 1,
+			pair: 1
 		};
 		var modOpts = {
 			flooding: 1,
