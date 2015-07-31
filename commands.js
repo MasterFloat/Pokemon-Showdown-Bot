@@ -447,9 +447,6 @@ exports.commands = {
 	guia: 'guide',
 	guide: function(arg, user, room) {
 		this.say(room, '**Guide:** http://pastebin.com/irQt4ypn');
-		var TheDate = new Date();
-        logData.Data.log.push('Username: ' + user.name + '. Room: ' + room.id + '. Command: -guide.  Time[' + TheDate + '].');
-        fs.writeFileSync('./log.ini', ini.stringify(logData));
 	},
 
 	code: 'github',
@@ -458,10 +455,6 @@ exports.commands = {
 	git: 'github',
 	github: function(arg, user, room) {
 		this.say(room, '**Source Code:** https://github.com/MasterFloat/Pokemon-Showdown-Bot');
-
-		var TheDate = new Date();
-        logData.Data.log.push('Username: ' + user.name + '. Room: ' + room.id + '. Command: -github.  Time[' + TheDate + '].');
-        fs.writeFileSync('./log.ini', ini.stringify(logData));
 	},
 
 	/*********************
