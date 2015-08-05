@@ -17,7 +17,7 @@ const ACTION_COOLDOWN = 3 * 1000;
 const FLOOD_MESSAGE_NUM = 5;
 const FLOOD_PER_MSG_MIN = 500; // this is the minimum time between messages for legitimate spam. It's used to determine what "flooding" is caused by lag
 const FLOOD_MESSAGE_TIME = 6 * 1000;
-const MIN_CAPS_LENGTH = 12;
+const MIN_CAPS_LENGTH = 16;
 const MIN_CAPS_PROPORTION = 0.8;
 
 // TODO: move to rooms.js
@@ -72,20 +72,29 @@ exports.parse = {
 	},
 	message: function (message, room) {
 		var spl = message.split('|');
+                if (!spl[1]) {
+			if (/was promoted to Room Driver/i.test(spl[0]) && toId(message.substring(0, message.indexOf("was"))) !== 'resourceful') this.say(room, '__Congratulations on becoming a Driver ' + spl[0].substr(0, spl[0].indexOf("was promoted to Room") - 1) + '__');
+			if (/was promoted to Room Moderator/i.test(spl[0]) && toId(message.substring(0, message.indexOf("was"))) !== 'resourceful') this.say(room, '__Congratulations on becoming a Moderator ' + spl[0].substr(0, spl[0].indexOf("was promoted to Room") - 1) + '__');
+			if (/was promoted to Room Owner/i.test(spl[0]) && toId(message.substring(0, message.indexOf("was"))) !== 'resourceful') this.say(room, '__**Congratulations on becoming a Owner ' + spl[0].substr(0, spl[0].indexOf("was promoted to Room") - 1) + ' **__');
+			if (/was promoted to Room Voice/i.test(spl[0]) && toId(message.substring(0, message.indexOf("was"))) !== 'resourceful') this.say(room, '__Congrats on becoming Voice ' + spl[0].substr(0, spl[0].indexOf("was promoted to Room") - 1) + '__');
+			spl = spl[0].split('>');
+			if (spl[1]) this.room = spl[1];
+			return;
+		}
 		switch (spl[1]) {
 			case 'challstr':
 				info('received challstr, logging in...');
-				var id = spl[2];
-				var str = spl[3];
+				let id = spl[2];
+				let str = spl[3];
 
-				var requestOptions = {
+				let requestOptions = {
 					hostname: this.actionUrl.hostname,
 					port: this.actionUrl.port,
 					path: this.actionUrl.pathname,
 					agent: false
 				};
 
-				var data;
+				let data;
 				if (!Config.pass) {
 					requestOptions.method = 'GET';
 					requestOptions.path += '?act=getassertion&userid=' + toId(Config.nick) + '&challengekeyid=' + id + '&challenge=' + str;
@@ -98,9 +107,9 @@ exports.parse = {
 					};
 				}
 
-				var req = https.request(requestOptions, function (res) {
+				let req = https.request(requestOptions, function (res) {
 					res.setEncoding('utf8');
-					var data = '';
+					let data = '';
 					res.on('data', function (chunk) {
 						data += chunk;
 					});
@@ -173,60 +182,67 @@ exports.parse = {
 				setInterval(this.cleanChatData.bind(this), 30 * 60 * 1000);
 				break;
 			case 'c':
-				var username = spl[2];
-				var user = Users.get(username);
+				let username = spl[2];
+				let user = Users.get(username);
 				if (!user) return false; // various "chat" responses contain other data
-				if (user === Users.self) return false;
-				if (this.isBlacklisted(user.id, room.id)) this.say(room, '/roomban ' + user.id + ', Blacklisted user');
+				if (user.isSelf) return false;
+				if (this.isBlacklisted(user.id, room.id)) return this.say(room, '/roomban ' + user.id + ', Blacklisted user');
 
 				spl = spl.slice(3).join('|');
-				if (!user.hasRank(room.id, '%')) this.processChatData(user.id, room.id, spl);
+				if (!user.hasRank(room, '%')) this.processChatData(user.id, room.id, spl);
 				this.chatMessage(spl, user, room);
 				break;
 			case 'c:':
-				var username = spl[3];
-				var user = Users.get(username);
+				let username = spl[3];
+				let user = Users.get(username);
 				if (!user) return false; // various "chat" responses contain other data
-				if (user === Users.self) return false;
-				if (this.isBlacklisted(user.id, room.id)) this.say(room, '/roomban ' + user.id + ', Blacklisted user');
+				if (user.isSelf) return false;
+				if (this.isBlacklisted(user.id, room.id)) return this.say(room, '/roomban ' + user.id + ', Blacklisted user');
 
 				spl = spl.slice(4).join('|');
-				if (!user.hasRank(room.id, '%')) this.processChatData(user.id, room.id, spl);
+				if (!user.hasRank(room, '%')) this.processChatData(user.id, room.id, spl);
 				this.chatMessage(spl, user, room);
+				spl = spl.toLowerCase();
+				if (spl.startsWith('/me ') && /(hugs)/i.test(spl) && /(resourceful)/i.test(spl)) {
+					this.response = setTimeout(function (room, response) {
+						this.say(room, response);
+					}.bind(this), 1 * 1000, room, '/me hugs ' + user.name + ' back');
+				}
 				break;
 			case 'pm':
-				var username = spl[2];
-				var user = Users.get(username);
-				var group = username.charAt(0);
+				let username = spl[2];
+				let user = Users.get(username);
 				if (!user) user = Users.add(username);
-				if (user === Users.self) return false;
+				if (user.isSelf) return false;
 
 				spl = spl.slice(4).join('|');
-				if (spl.startsWith('/invite ') && user.hasRank(group, '%') &&
-						!(toId(spl.substr(8)) === 'lobby' && Config.serverid === 'showdown')) {
+				if (spl.startsWith('/invite ') && Config.groups.indexOf(username.charAt(0)) >= Config.groups.indexOf('%') &&
+						!(toId(spl.substr(8)) === 'lobby' && Config.serverid === 'eos')) {
 					return send('|/join ' + spl.substr(8));
 				}
 				this.chatMessage(spl, user, user);
 				break;
 			case 'N':
-				var username = spl[2];
-				var oldid = spl[3];
-				var user = room.onRename(username, oldid);
-				if (this.isBlacklisted(user.id, room.id)) this.say(room, '/roomban ' + user.id + ', Blacklisted user');
+				let username = spl[2];
+				let oldid = spl[3];
+				let user = room.onRename(username, oldid);
+				if (this.isBlacklisted(user.id, room.id)) return this.say(room, '/roomban ' + user.id + ', Blacklisted user');
 				this.updateSeen(oldid, spl[1], user.id);
 				break;
 			case 'J': case 'j':
-				var username = spl[2];
-				var user = room.onJoin(username, username.charAt(0));
-				if (user === Users.self) return false;
-				if (this.isBlacklisted(user.id, room.id)) this.say(room, '/roomban ' + user.id + ', Blacklisted user');
+				let username = spl[2];
+				let user = room.onJoin(username, username.charAt(0));
+				if (user.isSelf) return false;
+				if (this.isBlacklisted(user.id, room.id)) return this.say(room, '/roomban ' + user.id + ', Blacklisted user');
 				this.updateSeen(user.id, spl[1], room.id);
+				//if (room.id === 'portugus') return this.say(room, 'Sejam bem vindos a sala Português, ' + user.name + '!');
+				if (user.name === 'warlic') return this.say(room, 'Hello \'sir\' warlic.');
 				break;
 			case 'l': case 'L':
-				var username = spl[2];
-				var user = room.onLeave(username);
+				let username = spl[2];
+				let user = room.onLeave(username);
 				if (user) {
-					if (user === Users.self) return false;
+					if (user.isSelf) return false;
 					this.updateSeen(user.id, spl[1], room.id);
 				} else {
 					this.updateSeen(toId(username), spl[1], room.id);
@@ -354,7 +370,7 @@ exports.parse = {
 		roomData.times.push(now);
 
 		// this deals with punishing rulebreakers, but note that the bot can't think, so it might make mistakes
-		if (Config.allowmute && Users.self.hasRank(roomid, '%') && Config.whitelist.indexOf(userid) < 0) {
+		if (Config.allowmute && Users.self.hasRank(Rooms.get(roomid), '%') && Config.whitelist.indexOf(userid) < 0) {
 			let useDefault = !(this.settings.modding && this.settings.modding[roomid]);
 			let pointVal = 0;
 			let muteMessage = '';
@@ -364,10 +380,10 @@ exports.parse = {
 			if ((useDefault || !this.settings.banword[roomid]) && pointVal < 2) {
 				let bannedPhraseSettings = this.settings.bannedphrases;
 				let bannedPhrases = !!bannedPhraseSettings ? (Object.keys(bannedPhraseSettings[roomid] || {})).concat(Object.keys(bannedPhraseSettings.global || {})) : [];
-				for (let bannedPhrase of bannedPhrases) {
-					if (msg.toLowerCase().indexOf(bannedPhrase) > -1) {
+				for (let i = 0; i < bannedPhrases.length; i++) {
+					if (msg.toLowerCase().indexOf(bannedPhrases[i]) > -1) {
 						pointVal = 2;
-						muteMessage = ', Automated response: your message contained a banned phrase';
+						muteMessage = ', Automated response: your message contained a banned phrase.';
 						break;
 					}
 				}
@@ -380,15 +396,23 @@ exports.parse = {
 			if ((useDefault || !('flooding' in modSettings)) && isFlooding) {
 				if (pointVal < 2) {
 					pointVal = 2;
-					muteMessage = ', Automated response: flooding';
+					muteMessage = ', Automated response: flooding.';
 				}
 			}
+
+			if (/(xnxx.com|youporn.com|xhamster.com|ixxx.com|pornhub.com|gonzoxxxmovies.com|pornxxxtubes.com|xxxfuckporn.com|pornolaba.com|hdxxx.me|taxi69.com|la-xxx.com|foxporns.com|hardxxxvids.com|xpornking.com|youx.xxx|peekvids.com|pornotuber.com|redtube.com|yes.xxx|tnaflix.com|topxlive.com|xvideos.com|xxx.com|porndig.com)/i.test(msg)) {
+				if (pointVal < 4) {
+					pointVal = 4;
+					muteMessage = ', Automated response: explicit content.';
+				}
+			}
+
 			// moderation for caps (over x% of the letters in a line of y characters are capital)
 			let capsMatch = msg.replace(/[^A-Za-z]/g, '').match(/[A-Z]/g);
 			if ((useDefault || !('caps' in modSettings)) && capsMatch && toId(msg).length > MIN_CAPS_LENGTH && (capsMatch.length >= ~~(toId(msg).length * MIN_CAPS_PROPORTION))) {
 				if (pointVal < 1) {
 					pointVal = 1;
-					muteMessage = ', Automated response: caps';
+					muteMessage = ', Automated response: caps.';
 				}
 			}
 			// moderation for stretching (over x consecutive characters in the message are the same)
@@ -396,7 +420,7 @@ exports.parse = {
 			if ((useDefault || !('stretching' in modSettings)) && stretchMatch) {
 				if (pointVal < 1) {
 					pointVal = 1;
-					muteMessage = ', Automated response: stretching';
+					muteMessage = ', Automated response: stretching.';
 				}
 			}
 
@@ -413,17 +437,34 @@ exports.parse = {
 				}
 				if (Config.privaterooms.indexOf(roomid) > -1 && cmd === 'warn') cmd = 'mute'; // can't warn in private rooms
 				// if the bot has % and not @, it will default to hourmuting as its highest level of punishment instead of roombanning
-				if (roomData.points >= 4 && !Users.self.hasRank(roomid, '@')) cmd = 'hourmute';
+				if (roomData.points >= 4 && !Users.self.hasRank(Rooms.get(roomid), '@')) cmd = 'hourmute';
 				if (userData.zeroTol > 4) { // if zero tolerance users break a rule they get an instant roomban or hourmute
-					muteMessage = ', Automated response: zero tolerance user';
-					cmd = Users.self.hasRank(roomid, '@') ? 'roomban' : 'hourmute';
+					muteMessage = ', Automated response: zero tolerance user.';
+					cmd = Users.self.hasRank(Rooms.get(roomid), '@') ? 'roomban' : 'hourmute';
 				}
 				if (roomData.points > 1) userData.zeroTol++; // getting muted or higher increases your zero tolerance level (warns do not)
 				roomData.lastAction = now;
 				this.say(Rooms.get(roomid), '/' + cmd + ' ' + userid + muteMessage);
 			}
+
 		}
 	},
+
+	/*autoResponses: function(msg, room, user){
+		if(toId(user) === toId(Config.nick)) return false;
+		if(msg.indexOf(Config.nick) > -1){
+			if(msg.indexOf('\/me') === 0){
+				if(/hugs/i.test(msg)) return this.say(room, '/me hugs back.')
+			}
+		}
+		if(/hugs/i.test(msg)) return this.say(room, '/me hugs back.')
+		return false;
+	},*/
+
+	autoResponses: function(msg, room, user) {
+		if(/hugs/i.test(msg)) return this.say(room, 'back.');
+	},
+
 	cleanChatData: function () {
 		var chatData = this.chatData;
 		for (let user in chatData) {
@@ -438,8 +479,8 @@ exports.parse = {
 				let newTimes = [];
 				let now = Date.now();
 				let times = roomData.times;
-				for (let time of times) {
-					if (now - time < 5 * 1000) newTimes.push(time);
+				for (let i = 0, len = times.length; i < len; i++) {
+					if (now - times[i] < 5 * 1000) newTimes.push(times[i]);
 				}
 				newTimes.sort(function (a, b) {
 					return a - b;
@@ -540,18 +581,18 @@ exports.parse = {
 		var uncache = [require.resolve(root)];
 		do {
 			let newuncache = [];
-			for (let i of uncache) {
-				if (require.cache[i]) {
+			for (let i = 0; i < uncache.length; ++i) {
+				if (require.cache[uncache[i]]) {
 					newuncache.push.apply(newuncache,
-						require.cache[i].children.map(function (module) {
+						require.cache[uncache[i]].children.map(function (module) {
 							return module.filename;
 						})
 					);
-					delete require.cache[i];
+					delete require.cache[uncache[i]];
 				}
 			}
 			uncache = newuncache;
-		} while (uncache.length);
+		} while (uncache.length > 0);
 	},
 	getDocMeta: function (id, callback) {
 		https.get('https://www.googleapis.com/drive/v2/files/' + id + '?key=' + Config.googleapikey, function (res) {
@@ -585,3 +626,4 @@ exports.parse = {
 		});
 	}
 };
+
