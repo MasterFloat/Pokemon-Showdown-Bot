@@ -1,4 +1,4 @@
-﻿var sys = require('sys');
+var sys = require('sys');
 var url = require('url');
 var http = require('http');
 
@@ -13,7 +13,7 @@ if (process.argv[2]) {
 	}
 
 	console.log('Getting data for ' + serverUrl + '...');
-	console.log('This may take some time, depending on Showdown\'s speed.');
+	console.log('This may take some time, depending on EOS\'s speed.');
 
 	var received = false;
 	var requestOptions = {
