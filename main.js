@@ -1,4 +1,4 @@
-﻿/**
+/**
  * This is the main file of Pokémon Showdown Bot
  *
  * Some parts of this code are taken from the Pokémon Showdown server code, so
