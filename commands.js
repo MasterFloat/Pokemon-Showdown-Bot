@@ -25,12 +25,6 @@ const CONFIGURABLE_COMMANDS = {
   'be': true
 };
 
-var fs = require('fs')
-, ini = require('./ini.js')
-
-var userData = ini.parse(fs.readFileSync('./userdata.ini', 'utf-8')).Data.usersarray;
-var logData = ini.parse(fs.readFileSync('./log.ini', 'utf-8'));
-
 //var wallTitle = [];
 //var wallMessage = [];
 //var wallRoom = [];
