@@ -1032,6 +1032,66 @@ exports.commands = {
       this.say(room, '__The game of trivia has been ended.__');
       triviaON = false;
     },
+    
+    
+	add: function(arg, user, room) {
+		var plus = arg.split('+');
+		if (plus.length < 2) return this.say(room, '__You must add at least two numbers.__');
+		var Result = "**Result:** ";
+		var num = 0;
+		
+		for (var i = 0; i < plus.length; i++) {
+			num += Number(plus[i]);
+		}
+		Result += num;
+		
+		this.say(room, Result);
+	},
+	
+	substract: function(arg, user, room) {
+		var minus = arg.split('-');
+		if (minus.length < 2) return this.say(room, '__You must substract at least two numbers.__');
+		var Result = "**Result:** ";
+		var num = 0;
+		
+		num += Number(minus[0]);
+		for (var i = 1; i < minus.length; i++) {
+			num -= Number(minus[i]);
+		}
+		Result += num;
+		
+		this.say(room, Result);
+	},
+	
+	multiply: function(arg, user, room) {
+		var times = arg.split('x');
+		if (times.length < 2) return this.say(room, '__You must multiply at least two numbers.__');
+		var Result = "**Result:** ";
+		var num = 0;
+		
+		num += Number(times[0]);
+		for (var i = 1; i < times.length; i++) {
+			num *= Number(times[i]);
+		}
+		Result += num;
+		
+		this.say(room, Result);
+	},
+	
+	divide: function(arg, user, room) {
+		var on = arg.split('/');
+		if (on.length < 2) return this.say(room, '__You must multiply at least two numbers.__');
+		var Result = "**Result:** ";
+		var num = 0;
+		
+		num += Number(on[0]);
+		for (var i = 1; i < on.length; i++) {
+			num /= Number(on[i]);
+		}
+		Result += num;
+		
+		this.say(room, Result);
+	},
 
   /********************
   * FUN COMMANDS ~END *
