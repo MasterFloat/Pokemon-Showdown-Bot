@@ -76,7 +76,7 @@ exports.parse = {
 			if (/was promoted to Room Driver/i.test(spl[0]) && toId(message.substring(0, message.indexOf("was"))) !== 'resourceful') this.say(room, '__Congratulations on becoming a Driver ' + spl[0].substr(0, spl[0].indexOf("was promoted to Room") - 1) + '__');
 			if (/was promoted to Room Moderator/i.test(spl[0]) && toId(message.substring(0, message.indexOf("was"))) !== 'resourceful') this.say(room, '__Congratulations on becoming a Moderator ' + spl[0].substr(0, spl[0].indexOf("was promoted to Room") - 1) + '__');
 			if (/was promoted to Room Owner/i.test(spl[0]) && toId(message.substring(0, message.indexOf("was"))) !== 'resourceful') this.say(room, '__**Congratulations on becoming a Owner ' + spl[0].substr(0, spl[0].indexOf("was promoted to Room") - 1) + ' **__');
-			if (/was promoted to Room Voice/i.test(spl[0]) && toId(message.substring(0, message.indexOf("was"))) !== 'resourceful') this.say(room, '__Congrats on becoming Voice ' + spl[0].substr(0, spl[0].indexOf("was promoted to Room") - 1) + '__');
+			if (/Congratulations to /i.test(spl[0]) && /for winning the /i.test(spl[0]) && / Tournament!/i.test(spl[0]) && toId(message.substring(0, message.indexOf("for"))) !== 'resourceful') this.say(room, '__Congratulations for winning the Tournament, ' + user.name + '!__');
 			spl = spl[0].split('>');
 			if (spl[1]) this.room = spl[1];
 			return;
@@ -208,6 +208,21 @@ exports.parse = {
 						this.say(room, response);
 					}.bind(this), 1 * 1000, room, '/me hugs ' + user.name + ' back');
 				}
+				if (spl.startsWith('/me ') && /(pets)/i.test(spl) && /(resourceful)/i.test(spl)) {
+					this.response = setTimeout(function (room, response) {
+						this.say(room, response);
+					}.bind(this), 1 * 1000, room, '/me purrs');
+				}
+				if (/(hey resourceful|hi resourceful|hello resourceful)/i.test(spl)) {
+					this.response = setTimeout(function (room, response) {
+						this.say(room, response);
+					}.bind(this), 1 * 1000, room, 'Hey ' + user.name + '!');
+				}
+				if (/(hey resourceful|hi resourceful|hello resourceful)/i.test(spl) && /(how are you|hru)/i.test(spl)) {
+					this.response = setTimeout(function (room, response) {
+						this.say(room, response);
+					}.bind(this), 1 * 1000, room, 'I\'m fine thanks!');
+				}
 				break;
 			case 'pm':
 				let username = spl[2];
@@ -237,6 +252,7 @@ exports.parse = {
 				this.updateSeen(user.id, spl[1], room.id);
 				//if (room.id === 'portugus') return this.say(room, 'Sejam bem vindos a sala Português, ' + user.name + '!');
 				if (user.name === 'warlic') return this.say(room, 'Hello \'sir\' warlic.');
+				if (room.id === 'themagiciansrabbit') return this.say(room, '/roomvoice ' + user.id);
 				break;
 			case 'l': case 'L':
 				let username = spl[2];
@@ -400,7 +416,7 @@ exports.parse = {
 				}
 			}
 
-			if (/(xnxx.com|youporn.com|xhamster.com|ixxx.com|pornhub.com|gonzoxxxmovies.com|pornxxxtubes.com|xxxfuckporn.com|pornolaba.com|hdxxx.me|taxi69.com|la-xxx.com|foxporns.com|hardxxxvids.com|xpornking.com|youx.xxx|peekvids.com|pornotuber.com|redtube.com|yes.xxx|tnaflix.com|topxlive.com|xvideos.com|xxx.com|porndig.com)/i.test(msg)) {
+			if (/(www.fakku.net|xnxx.com|youporn.com|xhamster.com|ixxx.com|pornhub.com|gonzoxxxmovies.com|pornxxxtubes.com|xxxfuckporn.com|pornolaba.com|hdxxx.me|taxi69.com|la-xxx.com|foxporns.com|hardxxxvids.com|xpornking.com|youx.xxx|peekvids.com|pornotuber.com|redtube.com|yes.xxx|tnaflix.com|topxlive.com|xvideos.com|xxx.com|porndig.com)/i.test(msg)) {
 				if (pointVal < 4) {
 					pointVal = 4;
 					muteMessage = ', Automated response: explicit content.';
