@@ -8,16 +8,26 @@
 
 var Rooms = Object.create(null);
 var rooms = Rooms.rooms = new Map();
-
+var getRoom = Rooms.get = function (name) {
+	if (Object.isObject(name)) return name;
+	return rooms.get(name);
+};
+var addRoom = Rooms.add = function (roomid, type) {
+	var room = getRoom(roomid);
+	if (room) return room;
+	room = new Room(roomid, type);
+	rooms.set(roomid, room);
+	return room;
+};
 Rooms.join = function () {
 	for (let i = 0; i < Config.rooms.length; i++) {
 		let room = toId(Config.rooms[i]);
-		if (room === 'lobby' && Config.serverid === 'showdown') continue;
+		if (room === 'lobby' && Config.serverid === 'eos') continue;
 		send('|/join ' + room);
 	}
 	for (let i = 0; i < Config.privaterooms.length; i++) {
 		let room = toId(Config.privaterooms[i]);
-		if (room === 'lobby' && Config.serverid === 'showdown') continue;
+		if (room === 'lobby' && Config.serverid === 'eos') continue;
 		send('|/join ' + room);
 	}
 };
@@ -82,17 +92,5 @@ class Room {
 		rooms.delete(this.id);
 	}
 }
-
-var getRoom = Rooms.get = function (name) {
-	return rooms.get(name);
-};
-
-Rooms.add = function (roomid, type) {
-	var room = getRoom(roomid);
-	if (room) return room;
-	room = new Room(roomid, type);
-	rooms.set(roomid, room);
-	return room;
-};
 
 module.exports = Rooms;
