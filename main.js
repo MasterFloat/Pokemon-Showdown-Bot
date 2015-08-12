@@ -33,7 +33,7 @@ function runNpm(command) {
 
 // First dependencies and welcome message
 try {
-	require('babel/register')({loose: 'all'});
+	require('babel/register');
 	require('sugar');
 	global.colors = require('colors');
 } catch (e) {
@@ -129,28 +129,28 @@ global.Commands = require('./commands.js').commands;
 global.Users = require('./users.js');
 global.Rooms = require('./rooms.js');
 global.Parse = require('./parser.js').parse;
-global.Connection = null;
 
+var connection = null;
 var queue = [];
 var dequeueTimeout = null;
 var lastSentAt = 0;
 
 global.send = function (data) {
-	if (!data || !Connection.connected) return false;
+	if (!connection.connected) return false;
 	
 	var now = Date.now();
 	if (now < lastSentAt + MESSAGE_THROTTLE - 5) {
-		queue.push(data);
 		if (!dequeueTimeout) {
 			dequeueTimeout = setTimeout(dequeue, now - lastSentAt + MESSAGE_THROTTLE);
 		}
+		queue.push(data);
 		return false;
 	}
 
 	if (!Array.isArray(data)) data = [data.toString()];
 	data = JSON.stringify(data);
 	dsend(data);
-	Connection.send(data);
+	connection.send(data);
 
 	lastSentAt = now;
 	if (dequeueTimeout) {
@@ -183,7 +183,7 @@ var connect = function (retry) {
 	});
 
 	ws.on('connect', function (con) {
-		Connection = con;
+		connection = con;
 		ok('connected to server ' + Config.server);
 
 		con.on('error', function (err) {
@@ -195,9 +195,7 @@ var connect = function (retry) {
 			error('connection closed: ' + reason + ' (' + code + ')');
 			info('retrying in one minute');
 
-			for (var i in Users.users) {
-				delete Users.users[i];
-			}
+			Users.users = Object.create(null);
 			Rooms.rooms.clear();
 			setTimeout(function () {
 				connect(true);
